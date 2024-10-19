@@ -83,6 +83,7 @@ def islandDetector(gridInput):
             
     return islandCount
 
+
 for grid in gridData:
     #print(grid)
     print(islandDetector(grid))
