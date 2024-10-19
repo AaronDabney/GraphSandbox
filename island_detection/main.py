@@ -32,8 +32,8 @@ gridData = [
 def islandDetector(gridInput):
     grid = deepcopy(gridInput) 
 
-    width = len(grid[0])
-    height = len(grid)
+    gridWidth = len(grid[0])
+    gridHeight = len(grid)
 
     offsets = [[ 0, 1],
                [ 1, 1],
@@ -44,15 +44,9 @@ def islandDetector(gridInput):
                [-1, 0],
                [-1, 1]]
 
-    def inBounds(x, y):
-        if (x < 0 or y < 0):
-            return False
-        if (x >= width or y >= height):
-            return False
-        return True
+    inBounds = lambda x, y : not (x < 0 or x >= gridWidth or y < 0 or y >= gridHeight)
 
-    def getGrid(x, y):
-        return grid[y][x]
+    getGrid = lambda x, y : grid[y][x]
 
     def setGrid(x, y, val):
         grid[y][x] = val
@@ -70,8 +64,8 @@ def islandDetector(gridInput):
 
     islandCount = 0
 
-    for y in range(height):
-        for x in range(width):
+    for y in range(gridHeight):
+        for x in range(gridWidth):
             if (not getGrid(x, y)):
                 continue
             islandCount += 1
