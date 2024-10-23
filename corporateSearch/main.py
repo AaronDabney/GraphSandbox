@@ -90,7 +90,7 @@ subReportCount = calculateReportNum(orgRoot, employeeID)
 print("Organization: ")
 print(json.dumps(orgRoot, indent=4))
 print('\n')
-print(f"Employee #{employeeID} is responsible for {subReportCount} report(s)")
+print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report(s)")
 
 # Note: Characters in random names are often represented in console with escape characters due to alternate unicode formats. i.e. Arabic, Mongolian, Mandarin
 
@@ -181,4 +181,4 @@ print(f"Employee #{employeeID} is responsible for {subReportCount} report(s)")
 # }
 
 
-# Employee #1 is responsible for 8 report(s)
+# Employee with ID:1 is responsible for 8 report(s)
