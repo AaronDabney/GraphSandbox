@@ -50,6 +50,11 @@ def generateOrganizationHiearchy(numEmployees):
 
 
 def calculateReportNum(orgRoot, targetEmployeeID):
+    # Guard clause
+    if not orgRoot:
+        print("WARNING: Invalid input")
+        return -1
+    
     # Init bfs queue
     queue = deque([orgRoot])
     
@@ -65,6 +70,7 @@ def calculateReportNum(orgRoot, targetEmployeeID):
 
     # Count is -1 for employees not in organization
     if targetEmployee == None:
+        print("WARNING: Employee does not exist")
         return -1
     
     # Reset bfs queue
@@ -82,39 +88,59 @@ def calculateReportNum(orgRoot, targetEmployeeID):
 
 
 
+
+# -- Testing -- #
+
 orgRoot = generateOrganizationHiearchy(7)
-employeeID = 1
-subReportCount = calculateReportNum(orgRoot, employeeID)
 
-
-print("Organization: ")
+print("Example organization: ")
 print(json.dumps(orgRoot, indent=4))
 print('\n')
+
+print("Calculate Subreport test:")
+employeeID = 1
+subReportCount = calculateReportNum(orgRoot, employeeID)
 print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report(s)")
+print('\n')
+
+print("Empty dict test: ")
+orgRootEmpty = {}
+print(calculateReportNum(orgRootEmpty, 2))
+print('\n')
+
+print("Nonexistent employeeID test: ")
+print(calculateReportNum(orgRoot, 20))
+print('\n')
+
+print("Employee with no reports test: ")
+employeeID = 7
+subReportCount = calculateReportNum(orgRoot, employeeID)
+print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report(s)")
+print('\n')
 
 # Note: Characters in random names are often represented in console with escape characters due to alternate unicode formats. i.e. Arabic, Mongolian, Mandarin
 
 # Output -> 
-# Organization: 
+# Example organization: 
 # {
 #     "name": {
-#         "title": "Ms",
-#         "first": "\u0641\u0627\u0637\u0645\u0647 \u0632\u0647\u0631\u0627",
-#         "last": "\u0639\u0644\u06cc\u0632\u0627\u062f\u0647"
+#         "title": "Mr",
+#         "first": "Rodoljub",
+#         "last": "Viloti\u0107"
 #     },
 #     "reports": [
 #         {
 #             "name": {
-#                 "title": "Monsieur",
-#                 "first": "Ethan",
-#                 "last": "Barbier"
+#                 "title": "Mr",
+#                 "first": "William",
+#                 "last": "Pena"
 #             },
 #             "reports": [
 #                 {
 #                     "name": {
-#                         "title": "Mr",
-#                         "first": "Crist\u00f3bal",
-#                         "last": "Moreno"
+#                         "title": "Miss",
+#                         "first": "Emma",
+#                         "last": "Alvarez"
 #                     },
 #                     "reports": [],
 #                     "id": 6
@@ -122,29 +148,11 @@ print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report
 #                 {
 #                     "name": {
 #                         "title": "Mr",
-#                         "first": "\u0645\u062d\u0645\u062f\u0627\u0645\u064a\u0646",
-#                         "last": "\u0632\u0627\u0631\u0639\u06cc"
+#                         "first": "Noah",
+#                         "last": "Lavigne"
 #                     },
 #                     "reports": [],
 #                     "id": 7
-#                 },
-#                 {
-#                     "name": {
-#                         "title": "Mr",
-#                         "first": "Brede",
-#                         "last": "Furre"
-#                     },
-#                     "reports": [],
-#                     "id": 8
-#                 },
-#                 {
-#                     "name": {
-#                         "title": "Mrs",
-#                         "first": "Sofia",
-#                         "last": "Kristensen"
-#                     },
-#                     "reports": [],
-#                     "id": 9
 #                 }
 #             ],
 #             "id": 2
@@ -152,17 +160,17 @@ print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report
 #         {
 #             "name": {
 #                 "title": "Mr",
-#                 "first": "Owen",
-#                 "last": "Rodriguez"
+#                 "first": "Amaury",
+#                 "last": "Brunet"
 #             },
 #             "reports": [],
 #             "id": 3
 #         },
 #         {
 #             "name": {
-#                 "title": "Mr",
-#                 "first": "Rasmus",
-#                 "last": "Petersen"
+#                 "title": "Miss",
+#                 "first": "Inaya",
+#                 "last": "Giraud"
 #             },
 #             "reports": [],
 #             "id": 4
@@ -170,8 +178,8 @@ print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report
 #         {
 #             "name": {
 #                 "title": "Ms",
-#                 "first": "Eylem",
-#                 "last": "Bogaers"
+#                 "first": "Judith",
+#                 "last": "Caldwell"
 #             },
 #             "reports": [],
 #             "id": 5
@@ -181,4 +189,19 @@ print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report
 # }
 
 
-# Employee with ID:1 is responsible for 8 report(s)
+# Calculate Subreport test:
+# Employee with ID:1 is responsible for 6 report(s)
+
+
+# Empty dict test: 
+# WARNING: Invalid input
+# -1
+
+
+# Nonexistent employeeID test: 
+# WARNING: Employee does not exist
+# -1
+
+
+# Employee with no reports test: 
+# Employee with ID:7 is responsible for 0 report(s)
