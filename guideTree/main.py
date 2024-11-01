@@ -20,6 +20,7 @@ def edgesToAdjacencyList(edges, directional = True):
     return aList
 
 # Returns a tree that will guide the shortest number of hops from every node to target node
+# Remeniscent of Djikstra but has no favored ordering of candidate nodes
 def guidingTreeToTarget(edges, targetNode):
     aList = edgesToAdjacencyList(edges, False)
     guideTree = {}
