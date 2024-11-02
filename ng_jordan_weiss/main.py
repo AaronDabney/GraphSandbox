@@ -47,4 +47,4 @@ print(kmeans.labels_)
 # To do: 
 # Sample intertia from kmeans clustering for range of cluster values. 
 # Identify elbow position and magnitude
-# Cluster number assosciated with strongest elbow is selected as definitive cluster
+# Using elbow data list, determine definitive number of clusters
