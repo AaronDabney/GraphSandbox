@@ -1,24 +1,26 @@
+#Four islands (A-B) (C) (D-E) (F-G)
 vertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-edges = [('A' ,'B'),('B' ,'A'), ('D' ,'E'), ('F' ,'G'), ('G' ,'F')]
+edges = [('A' ,'B'), ('D' ,'E'),  ('F' ,'G')]
 
-def countDistinctIslands(vertices, edges):
-    adjancencyList = {}
+# Expects undirected input
+def count_distinct_islands(vertices, edges):
+    adjancency_list = {}
 
     # For every vertex add it to the adjacency list with an empty set
     for vertex in vertices:
-        adjancencyList[vertex] = set()
+        adjancency_list[vertex] = set()
 
     for vertexA, vertexB in edges:
-        adjancencyList[vertexA].add(vertexB)
-        adjancencyList[vertexB].add(vertexA)
+        adjancency_list[vertexA].add(vertexB)
+        adjancency_list[vertexB].add(vertexA)
 
-    globabllyUnvistedVertices = set(adjancencyList.keys())
+    globablly_unvisted_vertices = set(adjancency_list.keys())
 
     def dfs_util(node, visited):
         visited.add(node)
-        neighbours = adjancencyList[node]
+        neighbours = adjancency_list[node]
 
-        globabllyUnvistedVertices.remove(node)
+        globablly_unvisted_vertices.remove(node)
 
         for neighbour in neighbours:
             if neighbour not in visited:
@@ -26,15 +28,17 @@ def countDistinctIslands(vertices, edges):
 
 
     count = 0
-    while len(globabllyUnvistedVertices) > 0:
-        dfs_util(list(globabllyUnvistedVertices)[0], set())
+    while len(globablly_unvisted_vertices) > 0:
+        dfs_util(list(globablly_unvisted_vertices)[0], set())
         count += 1
     
     return count
 
 
 
-
-result = countDistinctIslands(vertices, edges)
+result = count_distinct_islands(vertices, edges)
 
 print(result)
+# Output - 4
+
+# TODO: More test cases

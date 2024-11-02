@@ -3,7 +3,8 @@ import requests
 import json 
 import random
 
-def generatePerson():
+
+def generate_person():
     url = 'https://randomuser.me//api'
     headers = {'Accept' : 'application/json'}
 
@@ -29,93 +30,93 @@ def generatePerson():
 
 
 # Returns nested dictonary
-def generateOrganizationHiearchy(numEmployees):
+def generate_organization_hiearchy(num_employees):
     iter = 1
     # Employees are assigned an id property equal to their order of creation
-    root = generatePerson() 
+    root = generate_person() 
     root["id"] = iter
     queue = deque([root])
     
-    while (len(queue) > 0 and iter < numEmployees):
-        currentEmployee = queue.popleft()
+    while (len(queue) > 0 and iter < num_employees):
+        current_employee = queue.popleft()
         reports = []
         for i in range(random.randint(2, 4)):
             iter += 1
-            newEmployee = generatePerson()
-            newEmployee["id"] = iter
-            currentEmployee["reports"].append(newEmployee)
-            queue.append(newEmployee)
+            new_employee = generate_person()
+            new_employee["id"] = iter
+            current_employee["reports"].append(new_employee)
+            queue.append(new_employee)
     
     return root 
 
 
-def calculateReportNum(orgRoot, targetEmployeeID):
+def calculate_report_num(org_root, target_employee_ID):
     # Guard clause
-    if not orgRoot:
+    if not org_root:
         print("WARNING: Invalid input")
         return -1
     
     # Init bfs queue
-    queue = deque([orgRoot])
+    queue = deque([org_root])
     
     # Find target employee
-    targetEmployee = None
+    target_employee = None
     while len(queue) > 0:
-        currentNode = queue.popleft()
-        if currentNode["id"] == targetEmployeeID:
-            targetEmployee = currentNode
+        current_node = queue.popleft()
+        if current_node["id"] == target_employee_ID:
+            target_employee = current_node
             break
-        for report in currentNode["reports"]:
+        for report in current_node["reports"]:
             queue.append(report)
 
     # Count is -1 for employees not in organization
-    if targetEmployee == None:
+    if target_employee == None:
         print("WARNING: Employee does not exist")
         return -1
     
     # Reset bfs queue
-    queue = deque([targetEmployee])
+    queue = deque([target_employee])
 
     # Tally reports
-    reportsNum = 0
+    reports_num = 0
     while(len(queue) > 0):
-        currentNode = queue.popleft()
-        for report in currentNode["reports"]:
+        current_node = queue.popleft()
+        for report in current_node["reports"]:
             queue.append(report)
-            reportsNum += 1
+            reports_num += 1
 
-    return reportsNum
+    return reports_num
 
 
 
 
 # -- Testing -- #
 
-orgRoot = generateOrganizationHiearchy(7)
+org_root = generate_organization_hiearchy(7)
 
 print("Example organization: ")
-print(json.dumps(orgRoot, indent=4))
+print(json.dumps(org_root, indent=4))
 print('\n')
 
 print("Calculate Subreport test:")
-employeeID = 1
-subReportCount = calculateReportNum(orgRoot, employeeID)
-print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report(s)")
+employee_ID = 1
+sub_report_count = calculate_report_num(org_root, employee_ID)
+print(f"Employee with ID:{employee_ID} is responsible for {sub_report_count} report(s)")
 print('\n')
 
 print("Empty dict test: ")
-orgRootEmpty = {}
-print(calculateReportNum(orgRootEmpty, 2))
+org_root_empty = {}
+print(calculate_report_num(org_root_empty, 2))
 print('\n')
 
 print("Nonexistent employeeID test: ")
-print(calculateReportNum(orgRoot, 20))
+print(calculate_report_num(org_root, 20))
 print('\n')
 
 print("Employee with no reports test: ")
-employeeID = 7
-subReportCount = calculateReportNum(orgRoot, employeeID)
-print(f"Employee with ID:{employeeID} is responsible for {subReportCount} report(s)")
+employee_ID = 7
+sub_report_count = calculate_report_num(org_root, employee_ID)
+print(f"Employee with ID:{employee_ID} is responsible for {sub_report_count} report(s)")
 print('\n')
 
 # Note: Characters in random names are often represented in console with escape characters due to alternate unicode formats. i.e. Arabic, Mongolian, Mandarin

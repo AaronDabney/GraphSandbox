@@ -2,94 +2,80 @@ import numpy as np
 import math 
 import copy
 
-def affinityMatrix(adjacencyMatrix, sigma=1):
-    shape = adjacencyMatrix.shape
-    numRows, numCols = shape
+def build_affinity_matrix(adjacency_matrix, sigma=1):
+    shape = adjacency_matrix.shape
+    num_rows, num_cols = shape
 
-    maxAbsValue = max(adjacencyMatrix.max(), abs(adjacencyMatrix.min()))
+    max_abs_value = max(adjacency_matrix.max(), abs(adjacency_matrix.min()))
 
     output = np.ones(shape)
-    for rowIndex in range(numRows):
-        for columnIndex in range(numCols):
-            if columnIndex != rowIndex:
-                output[rowIndex][columnIndex] = 1 - (adjacencyMatrix[rowIndex][columnIndex] / maxAbsValue)
+    for row_index in range(num_rows):
+        for col_index in range(num_cols):
+            if col_index != row_index:
+                output[row_index][col_index] = 1 - (adjacency_matrix[row_index][col_index] / max_abs_value)
 
-    for rowIndex in range(numRows):
-        for columnIndex in range(numCols):
-            if columnIndex != rowIndex:
-                output[rowIndex][columnIndex] = math.exp(-0.5 * (output[rowIndex][columnIndex]**2) / sigma ** 2)
+    for row_index in range(num_rows):
+        for col_index in range(num_cols):
+            if col_index != row_index:
+                output[row_index][col_index] = math.exp(-0.5 * (output[row_index][col_index]**2) / sigma ** 2)
             else:
-                output[rowIndex][columnIndex] = 0
+                output[row_index][col_index] = 0
 
     return output
 
-def degreeMatrix(adjacencyMatrix):
-    width, height = adjacencyMatrix.shape
-    if width != height:
-        raise Exception("-- Input matrix must be square --")
-    
-    output = np.zeros((width, height))
+def build_degree_matrix(input_matrix):
+    shape = input_matrix.shape
+    num_rows, num_cols = shape
 
-    for y, row in enumerate(adjacencyMatrix):
-        for x, cell in enumerate(row):
-            if x != y:
-                output[y][y] += adjacencyMatrix[y][x]
-    
-    return output
-
-def degreeMatrixAlt(inputMatrix):
-    shape = inputMatrix.shape
-    numRows, numCols = shape
-
-    if numRows != numCols:
+    if num_rows != num_cols:
         raise Exception("-- Input matrix must be square --")
 
-    rowTallys = []
-    for i in range(numRows):
+    row_tallys = []
+    for i in range(num_rows):
         tally = 0
-        for j in range(numCols):
-            tally += inputMatrix[i, j]
-        rowTallys.append(tally)
+        for j in range(num_cols):
+            tally += input_matrix[i, j]
+        row_tallys.append(tally)
 
     output = np.zeros(shape)
-    for i in range(numRows):
-        output[i][i] = rowTallys[i]
+    for i in range(num_rows):
+        output[i][i] = row_tallys[i]
 
     return output
 
 
 # If two eigen vectors share an eigenvalue remove the one that occurs later 
 # preserving earliest occurence
-def orthogonalizedEigenMatrix(eigenData, threshold = 0.01):
-    eigenValues, eigenMatrix = eigenData
-    removeIndices = set()
+def build_orthogonal_eigen_matrix(eigen_data, threshold = 0.01):
+    eigen_values, eigen_matrix = eigen_data
+    remove_indices = set()
 
-    for i in range(len(eigenValues)):
-        for j in range(i + 1, len(eigenValues)):
-            difference = abs(eigenValues[i] - eigenValues[j])
+    for i in range(len(eigen_values)):
+        for j in range(i + 1, len(eigen_values)):
+            difference = abs(eigen_values[i] - eigen_values[j])
             if difference < threshold:
-                removeIndices.add(j)
+                remove_indices.add(j)
 
-    removeIndices = list(removeIndices)
-    removeIndices.sort(reverse=True)
+    remove_indices = list(remove_indices)
+    remove_indices.sort(reverse=True)
 
-    output = copy.deepcopy(eigenMatrix)
+    output = copy.deepcopy(eigen_matrix)
 
-    for index in removeIndices: 
+    for index in remove_indices: 
         output = np.delete(output, index, axis=1)
 
     return output
 
 # Start and end inclusive [start, end]
 # zero indexed
-def sampleRangeOfColumns(matrix, start, end):
+def sample_range_of_columns(matrix, start, end):
     return matrix[:,start:end + 1]
 
 
-def normalizeMatrixRows(matrixInput):
-    matrix = np.zeros(matrixInput.shape)#copy.deepcopy(matrixInput)
+def normalized_matrix_rows(matrix_input):
+    matrix = np.zeros(matrix_input.shape)
     
-    for y, row in enumerate(matrixInput):
+    for y, row in enumerate(matrix_input):
         length = np.linalg.norm(row)
         for x, item in enumerate(row):
             matrix[y][x] = item / length

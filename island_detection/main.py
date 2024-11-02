@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-gridData = [
+grid_data = [
     [[1, 0],
      [0, 1],
      [1, 0],
@@ -29,11 +29,11 @@ gridData = [
      [1, 0, 1]],
 ]
 
-def islandDetector(gridInput):
-    grid = deepcopy(gridInput) 
+def island_detector(grid_input):
+    grid = deepcopy(grid_input) 
 
-    gridWidth = len(grid[0])
-    gridHeight = len(grid)
+    grid_width = len(grid[0])
+    grid_height = len(grid)
 
     offsets = [[ 0, 1],
                [ 1, 1],
@@ -44,37 +44,37 @@ def islandDetector(gridInput):
                [-1, 0],
                [-1, 1]]
 
-    inBounds = lambda x, y : not (x < 0 or x >= gridWidth or y < 0 or y >= gridHeight)
+    in_bounds = lambda x, y : not (x < 0 or x >= grid_width or y < 0 or y >= grid_height)
 
-    getGrid = lambda x, y : grid[y][x]
+    get_grid = lambda x, y : grid[y][x]
 
-    def setGrid(x, y, val):
+    def set_grid(x, y, val):
         grid[y][x] = val
 
-    def searchAndZero(x, y):
-        if (not inBounds(x, y)):
+    def search_and_zero(x, y):
+        if (not in_bounds(x, y)):
             return
-        if (getGrid(x, y)):
-            setGrid(x, y, 0)
+        if (get_grid(x, y)):
+            set_grid(x, y, 0)
             for offset in offsets:
-                xOffset = offset[0]
-                yOffset = offset[1]
-                searchAndZero(x + xOffset, y + yOffset)
+                x_Offset = offset[0]
+                y_Offset = offset[1]
+                search_and_zero(x + x_Offset, y + y_Offset)
 
 
-    islandCount = 0
+    island_count = 0
 
-    for y in range(gridHeight):
-        for x in range(gridWidth):
-            if (not getGrid(x, y)):
+    for y in range(grid_height):
+        for x in range(grid_width):
+            if (not get_grid(x, y)):
                 continue
-            islandCount += 1
-            searchAndZero(x, y)
+            island_count += 1
+            search_and_zero(x, y)
             
-    return islandCount
+    return island_count
 
 
-for grid in gridData:
-    print(islandDetector(grid))
+for grid in grid_data:
+    print(island_detector(grid))
 
 # Output -> 1, 2, 4, 5, 1

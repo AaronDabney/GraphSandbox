@@ -1,18 +1,18 @@
 import numpy as np
 
-def roundVector(vector, numDecimalPlaces):
-    return np.array(list(map(lambda x: round(x, numDecimalPlaces), vector)))
+def round_vector(vector, num_decimal_places):
+    return np.array(list(map(lambda x: round(x, num_decimal_places), vector)))
 
-def floorVector(vector, floor=0):
-    minValue = min(vector)
-    offsetArray = list(map(lambda x: (x - minValue) + floor, vector))
-    return np.array(offsetArray)
+def floor_vector(vector, floor=0):
+    min_val = min(vector)
+    offsets = list(map(lambda x: (x - min_val) + floor, vector))
+    return np.array(offsets)
 
-def normalizeVector(vector):
+def normalize_vector(vector):
     length = np.linalg.norm(vector)
     return vector / length
 
-def rangeVector(vectorIn, floor):
-    vector = floorVector(vectorIn, floor)
+def range_vector(vector_in, floor):
+    vector = floor_vector(vector_in, floor)
     ceiling = max(vector)
     return (vector / ceiling)

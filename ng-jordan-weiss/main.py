@@ -1,25 +1,26 @@
 import numpy as np
-import scipy.linalg
-import testMatrices
-import matrix_util as mut
 import scipy
 from sklearn.cluster import KMeans
 
-aMatrix = testMatrices.c
-affinityMatrix = mut.affinityMatrix(aMatrix)
-degMatrix = mut.degreeMatrixAlt(affinityMatrix)
-d_i = scipy.linalg.fractional_matrix_power(degMatrix, -0.5)
-laplacian = np.matmul(d_i, np.matmul(affinityMatrix, d_i))
-eigData = np.linalg.eigh(laplacian)
+import test_matrices
+import matrix_util as mut
 
-print("aMatrix")
-print(aMatrix, '\n')
 
-print("affinityMatrix")
-print(affinityMatrix, '\n')
+a_matrix = test_matrices.c
+affinity_matrix = mut.build_affinity_matrix(a_matrix)
+degree_matrix = mut.build_degree_matrix(affinity_matrix)
+d_i = scipy.linalg.fractional_matrix_power(degree_matrix, -0.5)
+laplacian = np.matmul(d_i, np.matmul(affinity_matrix, d_i))
+eigen_data = np.linalg.eigh(laplacian)
 
-print("diagMatrix")
-print(degMatrix, '\n')
+print("a_matrix")
+print(a_matrix, '\n')
+
+print("affinity_matrix")
+print(affinity_matrix, '\n')
+
+print("degree_matrix")
+print(degree_matrix, '\n')
 
 print("d_i")
 print(d_i, '\n')
@@ -28,19 +29,19 @@ print("laplacian")
 print(laplacian, '\n')
 
 print("Eigendata")
-print(eigData)
+print(eigen_data)
 
 
-numClusters = 2
-orthoEigenMatrix = mut.orthogonalizedEigenMatrix(eigData)
-rowNum, colNum = orthoEigenMatrix.shape
+num_clusters = 2
+ortho_eigen_matrix = mut.build_orthogonal_eigen_matrix(eigen_data)
+row_num, col_num = ortho_eigen_matrix.shape
 
-sampledEigenMatrix = mut.sampleRangeOfColumns(orthoEigenMatrix, colNum - numClusters, colNum)
-normalizedEigenMatrix = mut.normalizeMatrixRows(sampledEigenMatrix)
+sampled_eigen_matrix = mut.sample_range_of_columns(ortho_eigen_matrix, col_num - num_clusters, col_num)
+normalized_eigen_matrix = mut.normalized_matrix_rows(sampled_eigen_matrix)
 
-print(normalizedEigenMatrix)
+print(normalized_eigen_matrix)
 
-kmeans = KMeans(n_clusters=numClusters).fit(normalizedEigenMatrix)
+kmeans = KMeans(n_clusters=num_clusters).fit(normalized_eigen_matrix)
 print(kmeans.labels_)
 
 # To do: 

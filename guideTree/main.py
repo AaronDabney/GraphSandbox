@@ -3,44 +3,45 @@ from collections import deque
 # Graph is circle with bridge in the middle
 edges = [['A' ,'B'],['B', 'C'],['C', 'D'], ['D','E'],['E', 'F'] ,['F' ,'G'], ['G' ,'A'], ['B', 'Z'], ['Z', 'L'], ['L', 'G']]
 
-def edgesToAdjacencyList(edges, directional = True):
-    aList = {}
+def edges_to_adjacency_list(edges, directional = True):
+    a_list = {}
     
-    for vertexA, vertexB in edges:
-        if vertexA not in aList:
-            aList[vertexA] = set()
-        if vertexB not in aList:
-            aList[vertexB] = set()
+    for vertex_A, vertex_B in edges:
+        if vertex_A not in a_list:
+            a_list[vertex_A] = set()
+        if vertex_B not in a_list:
+            a_list[vertex_B] = set()
 
-        aList[vertexA].add(vertexB)
+        a_list[vertex_A].add(vertex_B)
 
         if not directional:
-            aList[vertexB].add(vertexA)
+            a_list[vertex_B].add(vertex_A)
         
-    return aList
+    return a_list
 
 # Returns a tree that will guide the shortest number of hops from every node to target node
-# Remeniscent of Djikstra but has no favored ordering of candidate nodes
-def guidingTreeToTarget(edges, targetNode):
-    aList = edgesToAdjacencyList(edges, False)
-    guideTree = {}
+# Remeniscent of Djikstra but has defines no specific ordering of candidate nodes
+def guiding_tree_to_target(edges, target_node):
+    a_list = edges_to_adjacency_list(edges, False)
+    guide_tree = {}
 
-    for key in aList:
-        guideTree[key] = set()
+    for key in a_list:
+        guide_tree[key] = set()
 
-    queue = deque([targetNode])
-    visited = set([targetNode])
+    queue = deque([target_node])
+    visited = set([target_node])
 
     while (len(queue) > 0):
-        currentNode = queue.popleft()
-        visited.add(currentNode)
+        current_node = queue.popleft()
+        visited.add(current_node)
 
-        for neighbor in aList[currentNode]:
+        for neighbor in a_list[current_node]:
             if neighbor not in visited:
                 queue.append(neighbor)
-                guideTree[neighbor].add(currentNode)
+                guide_tree[neighbor].add(current_node)
     
-    return guideTree
+    return guide_tree
 
         
-print(guidingTreeToTarget(edges, 'E'))
+print(guiding_tree_to_target(edges, 'E'))
+# TODO: More tests
